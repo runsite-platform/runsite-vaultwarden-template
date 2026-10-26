@@ -1,0 +1,37 @@
+{
+  "name": "Vaultwarden",
+  "description": "Your own password manager, compatible with the official Bitwarden apps and browser extensions: passwords, passkeys, 2FA codes, secure notes, file attachments and Sends, with shared vaults for family and team. Runs in your own account on a small instance with a 1 GB persistent disk, no separate database needed. Vaultwarden is open source (AGPL-3.0) and is not affiliated with Bitwarden, Inc.",
+  "language": "rust",
+  "framework": "vaultwarden",
+  "category": "security",
+  "repo_url": "https://github.com/runsite-platform/runsite-vaultwarden-template",
+  "github_template_repo": "runsite-platform/runsite-vaultwarden-template",
+  "tags": [
+    "vaultwarden",
+    "bitwarden",
+    "password-manager",
+    "passkeys",
+    "2fa",
+    "self-hosted"
+  ],
+  "default_branch": "main",
+  "port": 8080,
+  "service_type": "web_service",
+  "requires_database": false,
+  "requires_redis": false,
+  "requires_s3": false,
+  "requires_email": false,
+  "disk_size_gb": 1,
+  "disk_mount_path": "/data",
+  "default_project_name": "vaultwarden",
+  "default_web_service_name": "vaultwarden",
+  "env_mappings": {
+    "ADMIN_TOKEN": {
+      "source": "random",
+      "length": 48
+    },
+    "PUBLIC_URL": {
+      "source": "web_service_public_url"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# Local check that mirrors the Runsite deploy: the Vaultwarden image + a disk with SQLite.
+# To try PostgreSQL instead, run: docker compose --profile postgres up --build
+services:
+  vaultwarden:
+    build: .
+    ports:
+      - "${VAULTWARDEN_PORT:-8080}:8080"
+    environment:
+      ADMIN_TOKEN: "local-admin-token-change-me"
+      PUBLIC_URL: "http://localhost:${VAULTWARDEN_PORT:-8080}"
+    volumes:
+      - vaultwarden-data:/data
+
+  vaultwarden-postgres:
+    profiles: [postgres]
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - "${VAULTWARDEN_POSTGRES_PORT:-8081}:8080"
+    environment:
+      DATABASE_URL: "postgresql://vaultwarden:p%40ss%3Aw%2Frd%231@postgres:5432/vaultwarden"
+      ADMIN_TOKEN: "local-admin-token-change-me"
+      PUBLIC_URL: "http://localhost:${VAULTWARDEN_POSTGRES_PORT:-8081}"
+    volumes:
+      - vaultwarden-postgres-data:/data
+
+  postgres:
+    profiles: [postgres]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: vaultwarden
+      POSTGRES_PASSWORD: "p@ss:w/rd#1"
+      POSTGRES_DB: vaultwarden
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  vaultwarden-data:
+  vaultwarden-postgres-data:
+  postgres-data:
